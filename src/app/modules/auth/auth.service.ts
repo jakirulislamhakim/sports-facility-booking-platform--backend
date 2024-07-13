@@ -59,7 +59,7 @@ const login = async (payload: TLoginUser) => {
     '90d',
   );
 
-  return { accessToken, refreshToken };
+  return { accessToken, refreshToken, isExistsUser };
 };
 
 export const AuthServices = {

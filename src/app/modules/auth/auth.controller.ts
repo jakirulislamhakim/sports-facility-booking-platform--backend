@@ -15,7 +15,11 @@ const signup = catchAsync(async (req, res) => {
 });
 
 const login = catchAsync(async (req, res) => {
-  const { accessToken, refreshToken } = await AuthServices.login(req.body);
+  const {
+    accessToken,
+    refreshToken,
+    isExistsUser: data,
+  } = await AuthServices.login(req.body);
 
   res.cookie('refreshToken', refreshToken, {
     secure: config.NODE_ENV !== 'development',
@@ -25,9 +29,10 @@ const login = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     message: `User logged in successfully`,
-    data: {
+    token: {
       accessToken,
     },
+    data,
   });
 });
 
