@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose';
 import { TUser } from './user.interface';
 import { USER_ROLE } from './user.constant';
 
-const userScheme = new Schema<TUser>(
+const userSchema = new Schema<TUser>(
   {
     name: {
       type: String,
@@ -32,7 +32,12 @@ const userScheme = new Schema<TUser>(
       required: true,
     },
   },
-  { timestamps: true },
+  // { timestamps: true },
 );
 
-export const User = model<TUser>('User', userScheme);
+// set password field "" when created user done
+userSchema.post('save', function () {
+  this.password = '';
+});
+
+export const User = model<TUser>('User', userSchema);
