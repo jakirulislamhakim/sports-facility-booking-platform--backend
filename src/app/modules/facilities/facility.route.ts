@@ -24,4 +24,5 @@ router.delete('/:id', auth('admin'), FacilityControllers.deleteFacility);
 
 router.get('/', auth('admin', 'user'), FacilityControllers.getAllFacility);
 
-export const FacilityRoutes = router;
+const FacilityRoutes = router;
+export default FacilityRoutes;
