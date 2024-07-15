@@ -52,7 +52,7 @@ const getAllFacilityFromDB = async () => {
     isDeleted: { $ne: true },
   });
   if (!result.length) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Facility is not found');
+    throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
   }
   return result;
 };
