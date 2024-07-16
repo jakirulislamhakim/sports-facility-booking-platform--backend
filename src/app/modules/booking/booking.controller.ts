@@ -53,7 +53,7 @@ const CheckAvailability = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: "Availability checked successfully",
+    message: 'Availability checked successfully',
     data,
   });
 });

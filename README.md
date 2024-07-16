@@ -1,4 +1,3 @@
-
 # Sports Facility Booking Platform
 
 ### Project Explanation
@@ -20,82 +19,86 @@ This project is a Sports Facility Booking Platform built using Node.js, Express,
 - **Backend:** Node.js, Express
 - **Database:** MongoDB with Mongoose
 - **Language:** TypeScript
-
+---
 
 ## API Documentation
 
-### User Endpoints
+### User Routes
 
-#### Create a User
+#### User Sign Up
 
 - **URL:** `/api/auth/signup`
 - **Method:** `POST`
-- **Headers:** None
 - **Body:**
   ```json
   {
-    "name": "User Name",
-    "email": "user@example.com",
-    "password": "password123",
-    "phone": "0123456789",
-    "role": "user", // or "admin"
-    "address": "User Address"
+    "name": "Your Name",
+    "email": "your.email@example.com",
+    "password": "your_password",
+    "phone": "1234567890",
+    "role": "user",
+    "address": "Your Address"
   }
   ```
 - **Response:**
   ```json
   {
     "success": true,
-    "message": "User created successfully",
+    "statusCode": 200,
+    "message": "User registered successfully",
     "data": {
-      "name": "User Name",
-      "email": "user@example.com",
-      "phone": "0123456789",
-      "role": "user",
-      "address": "User Address",
       "_id": "user_id",
-      "createdAt": "timestamp",
-      "updatedAt": "timestamp"
+      "name": "Your Name",
+      "email": "your.email@example.com",
+      "role": "user",
+      "phone": "1234567890",
+      "address": "Your Address"
     }
   }
   ```
 
-#### Login a User
+#### User Login
 
 - **URL:** `/api/auth/login`
 - **Method:** `POST`
-- **Headers:** None
 - **Body:**
   ```json
   {
-    "email": "user@example.com",
-    "password": "password123"
+    "email": "your.email@example.com",
+    "password": "your_password"
   }
   ```
 - **Response:**
   ```json
   {
     "success": true,
-    "message": "Login successful",
+    "statusCode": 200,
+    "message": "User logged in successfully",
+    "token": "JWT_TOKEN",
     "data": {
-      "token": "jwt_token"
+      "_id": "user_id",
+      "name": "Your Name",
+      "email": "your.email@example.com",
+      "role": "user",
+      "phone": "1234567890",
+      "address": "Your Address"
     }
   }
   ```
 
-### Facility Endpoints
+### Facility Routes
 
-#### Create a Facility
+#### Create a Facility (Admin Only)
 
 - **URL:** `/api/facilities`
 - **Method:** `POST`
-- **Headers:** `Authorization: Bearer <token>`
+- **Headers:** `Authorization: Bearer JWT_TOKEN`
 - **Body:**
   ```json
   {
     "name": "Facility Name",
     "description": "Facility Description",
-    "pricePerHour": 100,
+    "pricePerHour": 50,
     "location": "Facility Location"
   }
   ```
@@ -103,25 +106,24 @@ This project is a Sports Facility Booking Platform built using Node.js, Express,
   ```json
   {
     "success": true,
-    "message": "Facility created successfully",
+    "statusCode": 200,
+    "message": "Facility added successfully",
     "data": {
+      "_id": "facility_id",
       "name": "Facility Name",
       "description": "Facility Description",
-      "pricePerHour": 100,
+      "pricePerHour": 50,
       "location": "Facility Location",
-      "isDeleted": false,
-      "_id": "facility_id",
-      "createdAt": "timestamp",
-      "updatedAt": "timestamp"
+      "isDeleted": false
     }
   }
   ```
 
-#### Update a Facility
+#### Update a Facility (Admin Only)
 
 - **URL:** `/api/facilities/:id`
 - **Method:** `PUT`
-- **Headers:** `Authorization: Bearer <token>`
+- **Headers:** `Authorization: Bearer JWT_TOKEN`
 - **Body:**
   ```json
   {
@@ -135,39 +137,37 @@ This project is a Sports Facility Booking Platform built using Node.js, Express,
   ```json
   {
     "success": true,
+    "statusCode": 200,
     "message": "Facility updated successfully",
     "data": {
+      "_id": "facility_id",
       "name": "Updated Facility Name",
       "description": "Updated Facility Description",
       "pricePerHour": 120,
       "location": "Updated Facility Location",
-      "isDeleted": false,
-      "_id": "facility_id",
-      "createdAt": "timestamp",
-      "updatedAt": "timestamp"
+      "isDeleted": false
     }
   }
   ```
 
-#### Soft Delete a Facility
+#### Delete a Facility (Admin Only)
 
 - **URL:** `/api/facilities/:id`
 - **Method:** `DELETE`
-- **Headers:** `Authorization: Bearer <token>`
+- **Headers:** `Authorization: Bearer JWT_TOKEN`
 - **Response:**
   ```json
   {
     "success": true,
+    "statusCode": 200,
     "message": "Facility deleted successfully",
     "data": {
-      "name": "Facility Name",
-      "description": "Facility Description",
-      "pricePerHour": 100,
-      "location": "Facility Location",
-      "isDeleted": true,
       "_id": "facility_id",
-      "createdAt": "timestamp",
-      "updatedAt": "timestamp"
+      "name": "Updated Facility Name",
+      "description": "Updated Facility Description",
+      "pricePerHour": 120,
+      "location": "Updated Facility Location",
+      "isDeleted": true
     }
   }
   ```
@@ -176,88 +176,201 @@ This project is a Sports Facility Booking Platform built using Node.js, Express,
 
 - **URL:** `/api/facilities`
 - **Method:** `GET`
-- **Headers:** `Authorization: Bearer <token>`
 - **Response:**
   ```json
   {
     "success": true,
+    "statusCode": 200,
     "message": "Facilities retrieved successfully",
     "data": [
       {
+        "_id": "facility_id",
         "name": "Facility Name",
         "description": "Facility Description",
-        "pricePerHour": 100,
+        "pricePerHour": 50,
         "location": "Facility Location",
-        "isDeleted": false,
+        "isDeleted": false
+      },
+      {
         "_id": "facility_id",
-        "createdAt": "timestamp",
-        "updatedAt": "timestamp"
+        "name": "Updated Facility Name",
+        "description": "Updated Facility Description",
+        "pricePerHour": 120,
+        "location": "Updated Facility Location",
+        "isDeleted": false
       }
     ]
   }
   ```
 
-### Booking Endpoints
+### Booking Routes
 
-#### Create a Booking
+#### Check Availability
+
+- **URL:** `/api/check-availability`
+- **Method:** `GET`
+- **Query Parameters:** `date` (optional, format: YYYY-MM-DD)
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "statusCode": 200,
+    "message": "Availability checked successfully",
+    "data": [
+      {
+        "startTime": "08:00",
+        "endTime": "10:00"
+      },
+      {
+        "startTime": "14:00",
+        "endTime": "16:00"
+      }
+    ]
+  }
+  ```
+
+#### Create a Booking (User Only)
 
 - **URL:** `/api/bookings`
 - **Method:** `POST`
-- **Headers:** `Authorization: Bearer <token>`
+- **Headers:** `Authorization: Bearer JWT_TOKEN`
 - **Body:**
   ```json
   {
-    "user": "user_id",
     "facility": "facility_id",
-    "startTime": "10:00",
-    "endTime": "12:00",
     "date": "2024-06-15",
-    "isBooked": "true"
+    "startTime": "10:00",
+    "endTime": "13:00"
   }
   ```
 - **Response:**
   ```json
   {
     "success": true,
+    "statusCode": 200,
     "message": "Booking created successfully",
     "data": {
-      "user": "user_id",
-      "facility": "facility_id",
-      "startTime": "10:00",
-      "endTime": "12:00",
-      "date": "2024-06-15",
-      "isBooked": "true",
       "_id": "booking_id",
-      "createdAt": "timestamp",
-      "updatedAt": "timestamp"
+      "facility": "facility_id",
+      "date": "2024-06-15",
+      "startTime": "10:00",
+      "endTime": "13:00",
+      "user": "user_id",
+      "payableAmount": 90,
+      "isBooked": "confirmed"
     }
   }
   ```
 
-#### Get All Bookings
+#### View All Bookings (Admin Only)
 
 - **URL:** `/api/bookings`
 - **Method:** `GET`
-- **Headers:** `Authorization: Bearer <token>`
+- **Headers:** `Authorization: Bearer JWT_TOKEN`
 - **Response:**
   ```json
   {
     "success": true,
+    "statusCode": 200,
     "message": "Bookings retrieved successfully",
     "data": [
       {
-        "user": "user_id",
-        "facility": "facility_id",
-        "startTime": "10:00",
-        "endTime": "12:00",
-        "date": "2024-06-15",
-        "isBooked": "true",
         "_id": "booking_id",
-        "createdAt": "timestamp",
-        "updatedAt": "timestamp"
+        "facility": {
+          "_id": "facility_id",
+          "name": "Facility Name",
+          "description": "Facility Description",
+          "pricePerHour": 50,
+          "location": "Facility Location",
+          "isDeleted": false
+        },
+        "date": "2024-06-15",
+        "startTime": "10:00",
+        "endTime": "13:00",
+        "user": {
+          "_id": "user_id",
+          "name": "Your Name",
+          "email": "your.email@example.com",
+          "phone": "1234567890",
+          "role": "user",
+          "address": "Your Address"
+        },
+        "payableAmount": 90,
+        "isBooked": "confirmed"
+      }
+    ]
+  }
+  ```
+
+#### View Bookings by User (User Only)
+
+- **URL:** `/api/bookings/user`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer JWT_TOKEN`
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "statusCode": 200,
+    "message": "Bookings retrieved successfully",
+    "data": [
+      {
+        "_id": "booking_id",
+        "facility": {
+          "_id": "facility_id",
+          "name": "Facility Name",
+          "description": "Facility Description",
+          "pricePerHour": 50,
+          "location": "Facility Location",
+          "isDeleted": false
+        },
+        "date": "2024-06-15",
+        "startTime": "10:00",
+        "endTime": "13:00",
+        "user": "user_id",
+        "payableAmount": 90,
+        "isBooked": "confirmed"
       }
     ]
   }
   ```
 
 
+#### Cancel a Booking (User Only)
+
+- **URL:** `/api/bookings/:id`
+- **Method:** `DELETE`
+- **Headers:** `Authorization: Bearer JWT_TOKEN`
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "statusCode": 200,
+    "message": "Booking cancelled successfully",
+    "data": {
+      "_id": "booking_id",
+      "facility": {
+        "_id": "facility_id",
+        "name": "Facility Name",
+        "description": "Facility Description",
+        "pricePerHour": 50,
+        "location": "Facility Location",
+        "isDeleted": false
+      },
+      "date": "2024-06-15",
+      "startTime": "10:00",
+      "endTime": "13:00",
+      "user": {
+        "_id": "user_id",
+        "name": "Your Name",
+        "email": "your.email@example.com",
+        "phone": "1234567890",
+        "role": "user",
+        "address": "Your Address"
+      },
+      "payableAmount": 90,
+      "isBooked": "cancelled"
+    }
+  }
+  ```
+---

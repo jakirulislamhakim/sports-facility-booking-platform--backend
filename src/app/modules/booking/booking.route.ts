@@ -25,7 +25,7 @@ router.delete(
 
 router.get(
   '/check-availability',
-  auth('user' , 'admin'),
+  auth('user', 'admin'),
   BookingControllers.CheckAvailability,
 );
 
