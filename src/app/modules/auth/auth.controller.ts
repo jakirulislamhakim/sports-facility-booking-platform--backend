@@ -8,7 +8,7 @@ const signup = catchAsync(async (req, res) => {
   const data = await AuthServices.signupIntoDB(req.body);
 
   sendResponse(res, {
-    statusCode: httpStatus.CREATED,
+    statusCode: httpStatus.OK,
     message: `${data?.role} registered successfully`,
     data,
   });
@@ -27,7 +27,7 @@ const login = catchAsync(async (req, res) => {
   });
 
   sendResponse(res, {
-    statusCode: httpStatus.CREATED,
+    statusCode: httpStatus.OK,
     message: `User logged in successfully`,
     token: {
       accessToken,

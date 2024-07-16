@@ -7,7 +7,7 @@ const createFacility = catchAsync(async (req, res) => {
   const data = await FacilityServices.createFacilityIntoDB(req.body);
 
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    statusCode: httpStatus.CREATED,
     message: 'Facility added successfully',
     data,
   });
