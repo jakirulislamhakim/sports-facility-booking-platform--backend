@@ -59,7 +59,9 @@ const login = async (payload: TLoginUser) => {
     '90d',
   );
 
-  return { accessToken, refreshToken, isExistsUser };
+  const user = await User.findOne({ email })
+
+  return { accessToken, refreshToken, user };
 };
 
 export const AuthServices = {

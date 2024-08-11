@@ -3,9 +3,7 @@ import { Response } from 'express';
 type TResponseData<T> = {
   statusCode: number;
   message?: string;
-  token?: {
-    accessToken: string;
-  };
+  token?: string;
   data: T;
 };
 

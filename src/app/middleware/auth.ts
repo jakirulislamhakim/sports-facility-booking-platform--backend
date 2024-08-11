@@ -10,7 +10,7 @@ const auth = (...requiredRole: (keyof typeof USER_ROLE)[]) => {
   return catchAsync(async (req, res, next) => {
     const token = req.headers.authorization;
     if (!token) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You are unauthorized');
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route');
     }
 
     const [, accessToken] = token.split(' ');
@@ -24,13 +24,13 @@ const auth = (...requiredRole: (keyof typeof USER_ROLE)[]) => {
     // check required role is match with jwt decoded role
     const matchRole = requiredRole.includes(role);
     if (!matchRole) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You are unauthorized!');
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route!');
     }
 
     // check if the user exists on db
     const user = await User.findOne({ email, role });
     if (!user) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You are unauthorized!');
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route!');
     }
 
     // attach full user info

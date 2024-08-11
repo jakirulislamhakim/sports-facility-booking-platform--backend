@@ -45,7 +45,7 @@ const getAllBookingAdminFromDB = async () => {
 };
 
 const getUserBookingsFromDB = async (user_id: Types.ObjectId) => {
-  const result = await Booking.find({ user: user_id });
+  const result = await Booking.find({ user: user_id }).populate('facility');
   if (!result.length) {
     throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
   }
@@ -61,7 +61,6 @@ const BookingCancelByUserFromDB = async (id: string) => {
     { new: true, runValidators: true },
   )
     .populate('facility')
-    .populate('user');
 
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'Booking is not found!');
