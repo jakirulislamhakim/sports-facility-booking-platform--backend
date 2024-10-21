@@ -59,8 +59,7 @@ const BookingCancelByUserFromDB = async (id: string) => {
       isBooked: BookingStatus.cancelled,
     },
     { new: true, runValidators: true },
-  )
-    .populate('facility')
+  ).populate('facility');
 
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'Booking is not found!');

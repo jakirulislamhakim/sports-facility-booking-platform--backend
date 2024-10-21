@@ -40,7 +40,11 @@ const getAllFacility = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: 'Facility retrieved successfully',
+    message: `${
+      data.length === 0
+        ? 'No facility found'
+        : 'Facility retrieved successfully'
+    }`,
     data,
   });
 });

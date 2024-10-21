@@ -51,9 +51,7 @@ const getAllFacilityFromDB = async () => {
   const result = await Facility.find({
     isDeleted: { $ne: true },
   });
-  if (!result.length) {
-    throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
-  }
+
   return result;
 };
 
