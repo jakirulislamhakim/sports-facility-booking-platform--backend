@@ -22,7 +22,7 @@ const getAllBookingAdmin = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: 'Booking retrieved successfully',
+    message: data.length ? 'Booking retrieved successfully' : 'No Data Found',
     data,
   });
 });
@@ -32,7 +32,7 @@ const getUserBookings = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: 'Booking retrieved successfully',
+    message: data.length ? 'Booking retrieved successfully' : 'No Data Found',
     data,
   });
 });

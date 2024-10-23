@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 import { TFacility } from './facility.interface';
 import { Facility } from './facility.model';
+import QueryBuilder from '../../builder/QueryBuilder';
 
 // create facility
 const createFacilityIntoDB = async (payload: TFacility) => {
@@ -47,12 +48,29 @@ const deleteFacilityFromDB = async (id: string) => {
 };
 
 // get all facility
-const getAllFacilityFromDB = async () => {
-  const result = await Facility.find({
-    isDeleted: { $ne: true },
-  });
+const getAllFacilityFromDB = async (query: Record<string, string>) => {
+  const facilityQuery = new QueryBuilder(
+    Facility.find({
+      isDeleted: { $ne: true },
+    }),
+    query,
+  )
+    .search(['name', 'description', 'location'])
+    .filter()
+    .fields()
+    .sort();
 
-  return result;
+  const meta = await facilityQuery.countTotal();
+
+  // pagination
+  facilityQuery.paginate();
+
+  const data = await facilityQuery.modelQuery;
+
+  return {
+    data,
+    meta,
+  };
 };
 
 export const FacilityServices = {

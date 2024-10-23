@@ -6,7 +6,7 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handleDuplicateError = (err: any): TGenericErrorResponse => {
-  const statusCode = httpStatus.BAD_REQUEST;
+  const statusCode = httpStatus.CONFLICT;
   const message = 'Duplicate key error !';
 
   const pattern = /{([^}]*)}/;

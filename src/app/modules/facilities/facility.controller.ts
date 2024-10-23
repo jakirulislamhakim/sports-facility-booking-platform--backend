@@ -36,7 +36,8 @@ const deleteFacility = catchAsync(async (req, res) => {
 });
 
 const getAllFacility = catchAsync(async (req, res) => {
-  const data = await FacilityServices.getAllFacilityFromDB();
+  const query = req.query as Record<string, string>;
+  const { data, meta } = await FacilityServices.getAllFacilityFromDB(query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -46,6 +47,7 @@ const getAllFacility = catchAsync(async (req, res) => {
         : 'Facility retrieved successfully'
     }`,
     data,
+    meta,
   });
 });
 

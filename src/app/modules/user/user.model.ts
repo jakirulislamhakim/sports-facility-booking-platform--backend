@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { model, Query, Schema } from 'mongoose';
 import { TUser } from './user.interface';
 import { USER_ROLE } from './user.constant';
 
@@ -31,6 +31,10 @@ const userSchema = new Schema<TUser>(
       type: String,
       required: true,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   // { timestamps: true },
 );
@@ -38,6 +42,13 @@ const userSchema = new Schema<TUser>(
 // set password field "" when created user done
 userSchema.post('save', function () {
   this.password = '';
+});
+
+// Pre middleware to filter out deleted users
+userSchema.pre<Query<TUser[], TUser>>(/^find/, function (next) {
+  // 'this' refers to the current query
+  this.where({ isDeleted: false });
+  next();
 });
 
 export const User = model<TUser>('User', userSchema);

@@ -5,22 +5,51 @@ import { TLoginUser } from './auth.interface';
 import {
   bcryptComparePassword,
   bcryptHashPassword,
-  jwtToken,
+  jwtAccessToken,
+  jwtRefreshToken,
 } from './auth.utils';
-import config from '../../config';
 import AppError from '../../errors/AppError';
+import { USER_ROLE } from '../user/user.constant';
+import { decodedRefreshToken } from '../../utils/decodedJwtToken';
 
 const signupIntoDB = async (payload: TUser) => {
   const { password, ...remainingPayload } = payload;
 
-  const hashPassword = await bcryptHashPassword(password);
+  // check the user is already exists
+  const isExistsUser = await User.findOne({ email: payload.email });
+  if (isExistsUser) {
+    throw new AppError(httpStatus.CONFLICT, 'The user email is already exists');
+  }
 
-  const result = await User.create({
+  const hashPassword = await bcryptHashPassword(password);
+  // set user role
+  remainingPayload.role = USER_ROLE.user;
+
+  const data = await User.create({
     password: hashPassword,
     ...remainingPayload,
   });
 
-  return result;
+  if (!data) {
+    throw new Error("Can't created user");
+  }
+
+  // jwt payload
+  const jwtPayload = {
+    email: data.email,
+    role: data.role as keyof typeof USER_ROLE,
+  };
+
+  // create jwt access token
+  const accessToken = jwtAccessToken(jwtPayload);
+  // create jwt refresh token
+  const refreshToken = jwtRefreshToken(jwtPayload);
+
+  return {
+    accessToken,
+    refreshToken,
+    data,
+  };
 };
 
 const login = async (payload: TLoginUser) => {
@@ -28,7 +57,7 @@ const login = async (payload: TLoginUser) => {
   // check user exists
   const isExistsUser = await User.findOne({ email }).select('+password');
   if (!isExistsUser) {
-    throw new AppError(httpStatus.NOT_FOUND, '');
+    throw new AppError(httpStatus.NOT_FOUND, 'Incorrect email or password.');
   }
 
   // check valid password
@@ -37,34 +66,48 @@ const login = async (payload: TLoginUser) => {
     isExistsUser?.password as string,
   );
   if (!matchPassword) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Your password is incorrect');
+    throw new AppError(httpStatus.BAD_REQUEST, 'Incorrect email or password.');
   }
 
   // jwt payload
   const jwtPayload = {
     email: isExistsUser.email,
-    role: isExistsUser.role,
+    role: isExistsUser.role as keyof typeof USER_ROLE,
   };
 
   // create jwt access token
-  const accessToken = jwtToken(
-    jwtPayload,
-    config.JWT_ACCESS_SECRET_KEY as string,
-    '1d',
-  );
-  // create jwt
-  const refreshToken = jwtToken(
-    jwtPayload,
-    config.JWT_REFRESH_SECRET_KEY as string,
-    '90d',
-  );
+  const accessToken = jwtAccessToken(jwtPayload);
+  // create jwt refresh token
+  const refreshToken = jwtRefreshToken(jwtPayload);
 
   const user = await User.findOne({ email });
 
   return { accessToken, refreshToken, user };
 };
 
+const refreshToken = async (token: string) => {
+  const verifyRefreshToken = decodedRefreshToken(token);
+  const { email, role } = verifyRefreshToken;
+
+  const isExistsUser = await User.findOne({ email, role });
+  if (!isExistsUser) {
+    throw new AppError(httpStatus.FORBIDDEN, 'Invalid refresh token.');
+  }
+
+  // jwt payload
+  const jwtPayload = {
+    email: isExistsUser.email,
+    role: isExistsUser.role as keyof typeof USER_ROLE,
+  };
+
+  // create jwt access token
+  const accessToken = jwtAccessToken(jwtPayload);
+
+  return { accessToken };
+};
+
 export const AuthServices = {
   signupIntoDB,
   login,
+  refreshToken,
 };

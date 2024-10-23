@@ -11,7 +11,11 @@ const firstAdminData = {
 };
 
 const pushFIrstAdminIntoDB = async () => {
-  const user = await User.findOne({ role: 'admin' });
+  const user = await User.findOne({
+    email: config.FIRST_ADMIN_EMAIL,
+    role: 'admin',
+  });
+
   if (!user) {
     const password = await bcryptHashPassword(
       config.FIRST_ADMIN_PASSWORD as string,

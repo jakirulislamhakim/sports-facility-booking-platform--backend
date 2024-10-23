@@ -1,10 +1,10 @@
 import httpStatus from 'http-status';
 import AppError from '../errors/AppError';
 import catchAsync from '../utils/catchAsync';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import config from '../config';
+import { JwtPayload } from 'jsonwebtoken';
 import { User } from '../modules/user/user.model';
 import { USER_ROLE } from '../modules/user/user.constant';
+import { decodedAccessToken } from '../utils/decodedJwtToken';
 
 const auth = (...requiredRole: (keyof typeof USER_ROLE)[]) => {
   return catchAsync(async (req, res, next) => {
@@ -18,10 +18,8 @@ const auth = (...requiredRole: (keyof typeof USER_ROLE)[]) => {
 
     const [, accessToken] = token.split(' ');
 
-    const decoded = jwt.verify(
-      accessToken,
-      config.JWT_ACCESS_SECRET_KEY as string,
-    );
+    const decoded = decodedAccessToken(accessToken);
+
     const { email, role } = decoded as JwtPayload;
 
     // check required role is match with jwt decoded role
