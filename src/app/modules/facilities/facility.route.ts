@@ -22,7 +22,7 @@ router.put(
 
 router.delete('/:id', auth('admin'), FacilityControllers.deleteFacility);
 
-router.get('/', auth('admin', 'user'), FacilityControllers.getAllFacility);
+router.get('/', FacilityControllers.getAllFacility);
 
 const FacilityRoutes = router;
 export default FacilityRoutes;

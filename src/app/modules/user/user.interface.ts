@@ -9,5 +9,5 @@ export type TUser = {
   phone: string;
   role?: keyof typeof USER_ROLE;
   address: string;
-  isDeleted: boolean
+  isDeleted: boolean;
 };
