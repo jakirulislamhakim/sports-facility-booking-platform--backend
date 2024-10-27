@@ -30,7 +30,20 @@ const changeUserRole = catchAsync(async (req, res) => {
   });
 });
 
+const getMe = catchAsync(async (req, res) => {
+  const data = req.user;
+
+  // can't need get me service because user already attached in req
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'User role change successfully',
+    data,
+  });
+});
+
 export const UserController = {
   getAllUser,
   changeUserRole,
+  getMe,
 };

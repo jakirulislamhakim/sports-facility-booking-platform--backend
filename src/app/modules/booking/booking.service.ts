@@ -50,6 +50,14 @@ const getUserBookingsFromDB = async (user_id: Types.ObjectId) => {
   return result;
 };
 
+const getUserSingleBookingFromDB = async (bookingId: string) => {
+  const result = await Booking.findById({
+    _id: bookingId,
+  }).populate('facility');
+
+  return result;
+};
+
 const BookingCancelByUserFromDB = async (id: string) => {
   const result = await Booking.findByIdAndUpdate(
     id,
@@ -82,6 +90,7 @@ export const BookingServices = {
   createBookingIntoDB,
   getAllBookingAdminFromDB,
   getUserBookingsFromDB,
+  getUserSingleBookingFromDB,
   BookingCancelByUserFromDB,
   CheckAvailability,
 };

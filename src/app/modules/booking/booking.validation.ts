@@ -5,7 +5,7 @@ import { BookingStatus } from './booking.constant';
 const time24HrFormat = /^([01]\d|2[0-3]):([0-5]\d)$/;
 const dateYYMMDDFormat = /^\d{4}-\d{2}-\d{2}$/;
 
-export const createBookingValidationSchema = z.object({
+const createBookingValidationSchema = z.object({
   body: z
     .object({
       facility: z.string().refine((val) => Types.ObjectId.isValid(val), {

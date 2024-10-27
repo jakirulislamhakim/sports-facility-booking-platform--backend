@@ -36,7 +36,7 @@ const userSchema = new Schema<TUser>(
       default: false,
     },
   },
-  // { timestamps: true },
+  { timestamps: true },
 );
 
 // set password field "" when created user done

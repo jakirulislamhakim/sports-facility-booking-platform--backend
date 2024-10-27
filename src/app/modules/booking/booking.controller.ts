@@ -22,7 +22,7 @@ const getAllBookingAdmin = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: data.length ? 'Booking retrieved successfully' : 'No Data Found',
+    message: data.length ? 'Bookings retrieved successfully' : 'No Data Found',
     data,
   });
 });
@@ -32,7 +32,18 @@ const getUserBookings = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: data.length ? 'Booking retrieved successfully' : 'No Data Found',
+    message: data.length ? 'Bookings retrieved successfully' : 'No Data Found',
+    data,
+  });
+});
+
+const getUserSingleBooking = catchAsync(async (req, res) => {
+  const { bookingId } = req.params;
+  const data = await BookingServices.getUserSingleBookingFromDB(bookingId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: `Booking retrieved successfully`,
     data,
   });
 });
@@ -62,6 +73,7 @@ export const BookingControllers = {
   createBooking,
   getAllBookingAdmin,
   getUserBookings,
+  getUserSingleBooking,
   bookingCancelByUser,
   CheckAvailability,
 };

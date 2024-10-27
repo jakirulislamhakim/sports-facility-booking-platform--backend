@@ -17,7 +17,7 @@ const bookingSchema = new Schema<TBooking>(
     },
   },
   {
-    // timestamps: true,
+    timestamps: true,
   },
 );
 
