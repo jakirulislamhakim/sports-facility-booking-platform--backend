@@ -5,7 +5,9 @@ import { Facility } from './facility.model';
 import QueryBuilder from '../../builder/QueryBuilder';
 
 // create facility
-const createFacilityIntoDB = async (payload: TFacility) => {
+const createFacilityIntoDB = async (imageUrl: string, payload: TFacility) => {
+  payload.image = imageUrl;
+
   const result = await Facility.create(payload);
   return result;
 };

@@ -4,20 +4,24 @@ import validateRequest from '../../middleware/validateRequest';
 import { FacilityValidations } from './facility.validation';
 import auth from '../../middleware/auth';
 import { USER_ROLE } from '../user/user.constant';
+import { upload } from '../../config/multer.config';
+import parseTextToJSON from '../../middleware/parseTextToJSON';
 
 const router = Router();
 
 router.post(
   '/',
-  auth(USER_ROLE.admin),
+  upload.single('image'),
+  parseTextToJSON,
   validateRequest(FacilityValidations.createFacilityValidationSchema),
+  auth(USER_ROLE.admin),
   FacilityControllers.createFacility,
 );
 
 router.put(
   '/:id',
-  auth(USER_ROLE.admin),
   validateRequest(FacilityValidations.updateFacilityValidationSchema),
+  auth(USER_ROLE.admin),
   FacilityControllers.updateFacility,
 );
 

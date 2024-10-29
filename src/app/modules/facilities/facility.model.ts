@@ -30,8 +30,12 @@ const facultySchema = new Schema<TFacility>(
       type: Boolean,
       default: false,
     },
+    image: {
+      type: String,
+      required: true,
+    },
   },
-  // { timestamps: true }
+  { timestamps: true },
 );
 
 export const Facility = model<TFacility>('Facility', facultySchema);

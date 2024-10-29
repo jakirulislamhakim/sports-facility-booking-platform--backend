@@ -2,9 +2,16 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { FacilityServices } from './facility.service';
+import AppError from '../../errors/AppError';
 
 const createFacility = catchAsync(async (req, res) => {
-  const data = await FacilityServices.createFacilityIntoDB(req.body);
+  const imgUrl = req.file?.path;
+
+  if (!imgUrl) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Image is required');
+  }
+
+  const data = await FacilityServices.createFacilityIntoDB(imgUrl, req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
