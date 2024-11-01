@@ -34,6 +34,7 @@ const facultySchema = new Schema<TFacility>(
       type: String,
       required: true,
     },
+    rating: { type: Number, required: true, min: 0, max: 5 },
   },
   { timestamps: true },
 );

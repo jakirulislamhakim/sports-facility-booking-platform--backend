@@ -16,7 +16,10 @@ const createFacilityIntoDB = async (imageUrl: string, payload: TFacility) => {
 const updateFacilityIntoDB = async (
   id: string,
   payload: Partial<TFacility>,
+  imgUrl: string | undefined,
 ) => {
+  if (imgUrl) payload.image = imgUrl;
+
   const result = await Facility.findByIdAndUpdate(id, payload, {
     new: true,
     runValidators: true,
@@ -75,9 +78,21 @@ const getAllFacilityFromDB = async (query: Record<string, string>) => {
   };
 };
 
+// get all facility
+const getSingleFacilityFromDB = async (id: string) => {
+  const result = await Facility.findById(id);
+
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Facility is not found!');
+  }
+
+  return result;
+};
+
 export const FacilityServices = {
   createFacilityIntoDB,
   updateFacilityIntoDB,
   deleteFacilityFromDB,
   getAllFacilityFromDB,
+  getSingleFacilityFromDB,
 };

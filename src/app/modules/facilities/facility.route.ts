@@ -18,8 +18,10 @@ router.post(
   FacilityControllers.createFacility,
 );
 
-router.put(
+router.patch(
   '/:id',
+  upload.single('image'),
+  parseTextToJSON,
   validateRequest(FacilityValidations.updateFacilityValidationSchema),
   auth(USER_ROLE.admin),
   FacilityControllers.updateFacility,
@@ -32,6 +34,8 @@ router.delete(
 );
 
 router.get('/', FacilityControllers.getAllFacility);
+
+router.get('/:id', FacilityControllers.getSingleFacility);
 
 const FacilityRoutes = router;
 export default FacilityRoutes;

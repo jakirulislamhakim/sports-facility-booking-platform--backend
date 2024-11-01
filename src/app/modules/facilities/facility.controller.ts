@@ -21,8 +21,14 @@ const createFacility = catchAsync(async (req, res) => {
 });
 
 const updateFacility = catchAsync(async (req, res) => {
+  const imgUrl = req.file?.path;
+
   const { id } = req.params;
-  const data = await FacilityServices.updateFacilityIntoDB(id, req.body);
+  const data = await FacilityServices.updateFacilityIntoDB(
+    id,
+    req.body,
+    imgUrl,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -58,9 +64,21 @@ const getAllFacility = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleFacility = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const data = await FacilityServices.getSingleFacilityFromDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: 'Facility retrieved successfully',
+    data,
+  });
+});
+
 export const FacilityControllers = {
   createFacility,
   updateFacility,
   deleteFacility,
   getAllFacility,
+  getSingleFacility,
 };

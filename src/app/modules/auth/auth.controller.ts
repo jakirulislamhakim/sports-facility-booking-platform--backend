@@ -16,9 +16,19 @@ const signup = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: `${data?.role} registered successfully`,
+    message: `User registered successfully`,
     data,
     token: accessToken,
+  });
+});
+
+const createAdminByAdmin = catchAsync(async (req, res) => {
+  const data = await AuthServices.createAdminByAdminIntoDB(req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    message: `Admin registered successfully`,
+    data,
   });
 });
 
@@ -57,6 +67,7 @@ const refreshToken = catchAsync(async (req, res) => {
 
 export const AuthControllers = {
   signup,
+  createAdminByAdmin,
   login,
   refreshToken,
 };

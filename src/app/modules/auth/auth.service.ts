@@ -31,7 +31,7 @@ const signupIntoDB = async (payload: TUser) => {
   });
 
   if (!data) {
-    throw new Error("Can't created user");
+    throw new Error("Something went wrong! Can't created user");
   }
 
   // jwt payload
@@ -50,6 +50,34 @@ const signupIntoDB = async (payload: TUser) => {
     refreshToken,
     data,
   };
+};
+
+const createAdminByAdminIntoDB = async (payload: TUser) => {
+  const { password, ...remainingPayload } = payload;
+
+  // check the email address is already exists
+  const isExistsUser = await User.findOne({ email: payload.email });
+  if (isExistsUser) {
+    throw new AppError(
+      httpStatus.CONFLICT,
+      'The admin email is already exists',
+    );
+  }
+
+  const hashPassword = await bcryptHashPassword(password);
+  // set admin role
+  remainingPayload.role = USER_ROLE.admin;
+
+  const result = await User.create({
+    password: hashPassword,
+    ...remainingPayload,
+  });
+
+  if (!result) {
+    throw new Error("Something went wrong! Can't created admin");
+  }
+
+  return result;
 };
 
 const login = async (payload: TLoginUser) => {
@@ -108,6 +136,7 @@ const refreshToken = async (token: string) => {
 
 export const AuthServices = {
   signupIntoDB,
+  createAdminByAdminIntoDB,
   login,
   refreshToken,
 };

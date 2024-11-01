@@ -18,6 +18,12 @@ const createFacilityValidationSchema = z.object({
       .min(5, { message: 'Location must be at least 5 characters long' })
       .max(200, { message: 'Location must be at most 200 characters long' }),
     isDeleted: z.boolean().optional().default(false),
+    rating: z
+      .number({
+        required_error: 'Rating is required',
+      })
+      .min(1, 'Rating must be at least 1')
+      .max(5, 'Rating must be at most 5'),
   }),
 });
 

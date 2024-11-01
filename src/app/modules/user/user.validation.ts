@@ -8,7 +8,10 @@ const userValidationSchema = z.object({
     password: z.string().min(6),
     phone: z.string().regex(/^\+?[0-9]{10,14}$/), // regex for phone number
     role: z.enum(Object.keys(USER_ROLE) as [string, ...string[]]).optional(),
-    address: z.string().min(6).max(100),
+    address: z
+      .string()
+      .min(3, { message: 'Address must be upper 3 characters' })
+      .max(60),
   }),
 });
 

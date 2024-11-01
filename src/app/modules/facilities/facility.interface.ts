@@ -5,4 +5,5 @@ export type TFacility = {
   location: string;
   isDeleted: boolean;
   image: string;
+  rating: number;
 };
