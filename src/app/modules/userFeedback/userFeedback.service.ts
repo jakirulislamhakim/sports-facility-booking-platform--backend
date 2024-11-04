@@ -2,8 +2,9 @@ import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 import { Booking } from '../booking/booking.model';
 import { TUser } from '../user/user.interface';
-import { TUserFeedback } from './userFeedback.interface';
+import { TUserFeedback, TUserSendMessage } from './userFeedback.interface';
 import { UserFeedback } from './userFeedback.model';
+import sendEmail from '../../utils/sendEmail';
 
 const getAllUserFeedbackFromDB = async () => {
   // create user feedback
@@ -36,7 +37,12 @@ const createUserFeedbackIntoDB = async (
   return result;
 };
 
+const sendMessageByEmail = async (payload: TUserSendMessage) => {
+  await sendEmail(payload);
+};
+
 export const UserFeedbackServices = {
   getAllUserFeedbackFromDB,
   createUserFeedbackIntoDB,
+  sendMessageByEmail,
 };

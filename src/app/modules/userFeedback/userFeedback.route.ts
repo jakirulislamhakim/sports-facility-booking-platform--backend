@@ -16,5 +16,11 @@ router.post(
   UserFeedbackControllers.createUserFeedback,
 );
 
+router.post(
+  '/send-message',
+  validateRequest(UserFeedbackValidationSchema.userSendMessageValidationSchema),
+  UserFeedbackControllers.sendMessageByEmail,
+);
+
 const UserFeedbackRoutes = router;
 export default UserFeedbackRoutes;

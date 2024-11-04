@@ -7,3 +7,10 @@ export type TUserFeedback = {
   image: string;
   isDeleted: boolean;
 };
+
+export type TUserSendMessage = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};

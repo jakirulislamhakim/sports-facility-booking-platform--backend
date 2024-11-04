@@ -26,7 +26,18 @@ const createUserFeedback = catchAsync(async (req, res) => {
   });
 });
 
+const sendMessageByEmail = catchAsync(async (req, res) => {
+  await UserFeedbackServices.sendMessageByEmail(req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    message: `Send your message successfully`,
+    data: null,
+  });
+});
+
 export const UserFeedbackControllers = {
   getAllUserFeedback,
   createUserFeedback,
+  sendMessageByEmail,
 };
