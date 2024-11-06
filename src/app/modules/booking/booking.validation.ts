@@ -1,9 +1,9 @@
 import { Types } from 'mongoose';
 import { z } from 'zod';
-import { BookingStatus } from './booking.constant';
+import { BookingStatus, CurrentDate, TimeSlots } from './booking.constant';
 
-const time24HrFormat = /^([01]\d|2[0-3]):([0-5]\d)$/;
-const dateYYMMDDFormat = /^\d{4}-\d{2}-\d{2}$/;
+const dateYYMMDDFormat =
+  /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
 
 const createBookingValidationSchema = z.object({
   body: z
@@ -11,12 +11,7 @@ const createBookingValidationSchema = z.object({
       facility: z.string().refine((val) => Types.ObjectId.isValid(val), {
         message: 'Invalid Facility ID',
       }),
-      startTime: z.string().regex(time24HrFormat, {
-        message: 'Invalid time format. Expected format is HH:MM',
-      }),
-      endTime: z.string().regex(time24HrFormat, {
-        message: 'Invalid time format. Expected format is HH:MM',
-      }),
+      timeSlot: z.enum(TimeSlots),
       date: z.string().regex(dateYYMMDDFormat, {
         message: 'Invalid date format. Expected format is YYYY-MM-DD.',
       }),
@@ -26,13 +21,14 @@ const createBookingValidationSchema = z.object({
     })
     .refine(
       (body) => {
-        return body.endTime > body.startTime;
+        return body.date >= CurrentDate;
       },
-      { message: "Start time can't be greater than end time!" },
+      {
+        message: 'Booking date cannot be in the past',
+      },
     ),
 });
 
 export const BookingValidation = {
   createBookingValidationSchema,
-  // updateBookingValidationSchema
 };

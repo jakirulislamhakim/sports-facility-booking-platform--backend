@@ -60,11 +60,18 @@ const bookingCancelByUser = catchAsync(async (req, res) => {
 });
 
 const CheckAvailability = catchAsync(async (req, res) => {
-  const data = await BookingServices.CheckAvailability(req.query);
+  const { facility, date } = req.query;
+
+  const data = await BookingServices.CheckAvailability(
+    facility as string,
+    date as string,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: 'Availability checked successfully',
+    message: !data.timeSlot.length
+      ? 'No slots available for this selected date and facility.'
+      : 'Available slots for the selected date and facility.',
     data,
   });
 });

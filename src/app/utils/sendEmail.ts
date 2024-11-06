@@ -125,7 +125,6 @@ const sendEmail = async (payload: TUserSendMessage) => {
     await transporter.sendMail(adminMailOptions);
     await transporter.sendMail(userMailOptions);
   } catch (error) {
-    console.error('Error sending email:', error);
     throw Error('Failed to send message! Please try again');
   }
 };
