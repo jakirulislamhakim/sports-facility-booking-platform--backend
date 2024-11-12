@@ -4,6 +4,9 @@
 
 This project is a Sports Facility Booking Platform built using Node.js, Express, Mongoose, and TypeScript. This project allows users to register, log in, and book facilities. Admin users can create, update, and soft delete facilities. The application uses JSON Web Tokens (JWT) for authentication and Zod for request validation.
 
+ER DIAGRAM URL ->https://dbdiagram.io/d/sports-facility-booking-6732e1b6e9daa85aca1dc16a
+
+<iframe width="560" height="315" src='https://dbdiagram.io/e/6732e1b6e9daa85aca1dc16a/6732f9fee9daa85aca203586'> </iframe>
 
 ## Features
 
@@ -19,6 +22,7 @@ This project is a Sports Facility Booking Platform built using Node.js, Express,
 - **Backend:** Node.js, Express
 - **Database:** MongoDB with Mongoose
 - **Language:** TypeScript
+
 ---
 
 ## API Documentation
@@ -335,7 +339,6 @@ This project is a Sports Facility Booking Platform built using Node.js, Express,
   }
   ```
 
-
 #### Cancel a Booking (User Only)
 
 - **URL:** `/api/bookings/:id`
@@ -373,4 +376,5 @@ This project is a Sports Facility Booking Platform built using Node.js, Express,
     }
   }
   ```
+
 ---

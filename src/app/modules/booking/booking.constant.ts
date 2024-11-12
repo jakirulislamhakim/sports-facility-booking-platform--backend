@@ -4,7 +4,7 @@ export const BookingStatus = {
   cancelled: 'cancelled',
 } as const;
 
-export const CurrentDate = new Date().toISOString().slice(0, 10);
+export const CurrentDate = new Date().toLocaleDateString('en-CA');
 
 export const TimeSlots = [
   '09:00-10:00',
@@ -16,3 +16,9 @@ export const TimeSlots = [
   '15:00-16:00',
   '16:00-17:00',
 ] as const;
+
+export const PaymentStatus = {
+  paid: 'paid',
+  pending: 'pending',
+  failed: 'failed',
+} as const;

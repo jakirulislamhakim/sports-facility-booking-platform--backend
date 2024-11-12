@@ -4,6 +4,7 @@ import FacilityRoutes from '../modules/facilities/facility.route';
 import BookingRoutes from '../modules/booking/booking.route';
 import UserRoutes from '../modules/user/user.route';
 import UserFeedbackRoutes from '../modules/userFeedback/userFeedback.route';
+import PaymentRoutes from '../modules/payment/payment.route';
 
 const router = Router();
 
@@ -27,6 +28,10 @@ const moduleRoutes = [
   {
     path: '/user-feedback',
     route: UserFeedbackRoutes,
+  },
+  {
+    path: '/payment',
+    route: PaymentRoutes,
   },
 ];
 

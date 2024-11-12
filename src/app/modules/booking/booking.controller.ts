@@ -12,7 +12,7 @@ const createBooking = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
-    message: 'Booking created successfully',
+    message: 'Successfully booked your facility',
     data,
   });
 });

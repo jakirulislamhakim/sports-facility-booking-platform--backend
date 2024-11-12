@@ -5,9 +5,13 @@ import { TBooking } from './booking.interface';
 import { Booking } from './booking.model';
 import { Types } from 'mongoose';
 import { BookingStatus, CurrentDate, TimeSlots } from './booking.constant';
+import { initiatePayment } from '../payment/payment.utils';
+import { User } from '../user/user.model';
 
 const createBookingIntoDB = async (payload: TBooking, user: Types.ObjectId) => {
   const { facility, timeSlot, date } = payload;
+
+  // check the user is exists and isn't deleted
   const isFacilityExists = await Facility.findById(facility);
   if (!isFacilityExists) {
     throw new AppError(httpStatus.NOT_FOUND, 'Facility is not found!');
@@ -16,12 +20,13 @@ const createBookingIntoDB = async (payload: TBooking, user: Types.ObjectId) => {
     throw new AppError(httpStatus.NOT_FOUND, 'Facility is not found!');
   }
 
-  // set payableAmount
-  payload.payableAmount = isFacilityExists.pricePerHour;
-  // set user _id
-  payload.user = user;
+  // check the user is exists
+  const isExistsUser = await User.findById(user);
+  if (!isExistsUser) {
+    throw new AppError(httpStatus.NOT_FOUND, 'The user is not found!');
+  }
 
-  // check timeSlot is available in this date for this facility
+  // check timeSlot is available in this date for the facility
   const isBookedTimeSlot = await Booking.findOne({ facility, date, timeSlot });
   if (isBookedTimeSlot) {
     throw new AppError(
@@ -30,8 +35,27 @@ const createBookingIntoDB = async (payload: TBooking, user: Types.ObjectId) => {
     );
   }
 
+  // set payableAmount
+  payload.payableAmount = isFacilityExists.pricePerHour;
+  // set user _id
+  payload.user = user;
+  // set transaction id
+  payload.transactionId = `SFBP-${Date.now().toString()}`;
+
   const result = await Booking.create(payload);
-  return result;
+
+  const initiatePaymentPayload = {
+    amount: result.payableAmount.toString(),
+    cus_email: isExistsUser.email,
+    cus_name: isExistsUser.name,
+    cus_phone: isExistsUser.phone,
+    facilityName: isFacilityExists.name,
+    tran_id: result.transactionId,
+  };
+  // call initiate payment
+  const initiatePaymentInfo = initiatePayment(initiatePaymentPayload);
+
+  return initiatePaymentInfo;
 };
 
 const getAllBookingAdminFromDB = async () => {

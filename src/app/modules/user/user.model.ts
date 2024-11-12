@@ -39,6 +39,8 @@ const userSchema = new Schema<TUser>(
   { timestamps: true },
 );
 
+// createdAt
+
 // set password field "" when created user done
 userSchema.post('save', function () {
   this.password = '';

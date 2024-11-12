@@ -4,6 +4,7 @@ import globalErrorHandler from './app/middleware/globalErrorHandler';
 import notFoundRoute from './app/middleware/notFoundRoute';
 import cookieParser from 'cookie-parser';
 import { ModulesRoutes } from './app/routes';
+import limiter from './app/middleware/limiter';
 
 const app: Application = express();
 
@@ -16,6 +17,9 @@ app.use(
   }),
 );
 app.use(cookieParser());
+
+// rate limiting for api
+app.use(limiter);
 
 // application routes
 app.use('/api', ModulesRoutes);
