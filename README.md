@@ -1,4 +1,4 @@
-# Sports Facility Booking Platform
+# Sports Facility Booking Platform (Backend)
 
 ### Project Explanation
 
@@ -69,7 +69,6 @@ Update the `.env` file with your configuration (e.g., database URI, JWT secret, 
    Run the following command to start the server in development mode:
 
 ```bash
-Copy code
 npm run start-dev
 ```
 

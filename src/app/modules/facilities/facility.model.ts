@@ -39,4 +39,6 @@ const facultySchema = new Schema<TFacility>(
   { timestamps: true },
 );
 
+facultySchema.index({ name: 'text', description: 'text' });
+
 export const Facility = model<TFacility>('Facility', facultySchema);
