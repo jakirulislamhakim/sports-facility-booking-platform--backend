@@ -73,15 +73,43 @@ const getUserBookingsFromDB = async (user_id: Types.ObjectId) => {
   return result;
 };
 
-const getUserSingleBookingFromDB = async (bookingId: string) => {
+const getUserSingleBookingFromDB = async (
+  bookingId: string,
+  user_id: Types.ObjectId,
+) => {
   const result = await Booking.findById({
     _id: bookingId,
   }).populate('facility');
 
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'The booking is not found');
+  }
+
+  const isRequestedUser = result.user.equals(user_id);
+
+  if (!isRequestedUser) {
+    throw new AppError(httpStatus.FORBIDDEN, "You can't get the booking");
+  }
+
   return result;
 };
 
-const BookingCancelByUserFromDB = async (id: string) => {
+const BookingCancelByUserFromDB = async (
+  id: string,
+  user_id: Types.ObjectId,
+) => {
+  const booking = await Booking.findById(id).select('user');
+
+  if (!booking) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Booking is not found!');
+  }
+
+  const isRequestedUser = booking.user.equals(user_id);
+
+  if (!isRequestedUser) {
+    throw new AppError(httpStatus.FORBIDDEN, "You can't update the booking");
+  }
+
   const result = await Booking.findByIdAndUpdate(
     id,
     {
@@ -89,10 +117,6 @@ const BookingCancelByUserFromDB = async (id: string) => {
     },
     { new: true, runValidators: true },
   ).populate('facility');
-
-  if (!result) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Booking is not found!');
-  }
 
   return result;
 };
@@ -136,7 +160,7 @@ const CheckAvailability = async (
 
   // if in this day no slot booked for this facility then show all slot for the facility
   if (!existingBookingFacility.length) {
-    return { timeSlot: TimeSlots };
+    return { timeSlot: TimeSlots, date };
   }
 
   // get all booked timeSlot
@@ -144,7 +168,7 @@ const CheckAvailability = async (
 
   // exclude slot by filter out
   const timeSlot = TimeSlots.filter((slot) => !bookedSlot.includes(slot));
-  return { timeSlot };
+  return { timeSlot, date };
 };
 
 export const BookingServices = {

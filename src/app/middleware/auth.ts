@@ -26,7 +26,7 @@ const auth = (...requiredRole: (keyof typeof USER_ROLE)[]) => {
     const matchRole = requiredRole.includes(role);
     if (!matchRole) {
       throw new AppError(
-        httpStatus.UNAUTHORIZED,
+        httpStatus.FORBIDDEN,
         'You have no access to this route!',
       );
     }

@@ -37,7 +37,7 @@ const getMe = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: 'User role change successfully',
+    message: 'User retrieved successfully',
     data,
   });
 });

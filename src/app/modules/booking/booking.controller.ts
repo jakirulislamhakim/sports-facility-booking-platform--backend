@@ -2,6 +2,7 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { BookingServices } from './booking.service';
+import { Types } from 'mongoose';
 
 const createBooking = catchAsync(async (req, res) => {
   // Here, `!` asserts that `req.user` is not null or undefined
@@ -22,7 +23,9 @@ const getAllBookingAdmin = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: data.length ? 'Bookings retrieved successfully' : 'No Data Found',
+    message: data.length
+      ? 'Bookings retrieved successfully'
+      : 'No booking data found',
     data,
   });
 });
@@ -32,14 +35,21 @@ const getUserBookings = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
-    message: data.length ? 'Bookings retrieved successfully' : 'No Data Found',
+    message: data.length
+      ? 'Bookings retrieved successfully'
+      : 'No booking data found',
     data,
   });
 });
 
 const getUserSingleBooking = catchAsync(async (req, res) => {
   const { bookingId } = req.params;
-  const data = await BookingServices.getUserSingleBookingFromDB(bookingId);
+  const user_id = req.user?._id;
+
+  const data = await BookingServices.getUserSingleBookingFromDB(
+    bookingId,
+    user_id as Types.ObjectId,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -50,7 +60,12 @@ const getUserSingleBooking = catchAsync(async (req, res) => {
 
 const bookingCancelByUser = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const data = await BookingServices.BookingCancelByUserFromDB(id);
+  const user_id = req.user?._id;
+
+  const data = await BookingServices.BookingCancelByUserFromDB(
+    id,
+    user_id as Types.ObjectId,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

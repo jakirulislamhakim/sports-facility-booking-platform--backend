@@ -8,7 +8,7 @@ const getAllUserFeedback = catchAsync(async (req, res) => {
   const data = await UserFeedbackServices.getAllUserFeedbackFromDB();
 
   sendResponse(res, {
-    statusCode: httpStatus.CREATED,
+    statusCode: httpStatus.OK,
     message: `User feedback retrieved successfully`,
     data,
   });

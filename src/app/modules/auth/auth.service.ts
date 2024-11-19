@@ -85,7 +85,7 @@ const login = async (payload: TLoginUser) => {
   // check user exists
   const isExistsUser = await User.findOne({ email }).select('+password');
   if (!isExistsUser) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Incorrect email or password.');
+    throw new AppError(httpStatus.BAD_REQUEST, 'Incorrect email or password.');
   }
 
   // check valid password

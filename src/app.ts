@@ -12,7 +12,10 @@ const app: Application = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ['http://localhost:5173'],
+    origin: [
+      'http://localhost:5173',
+      'https://sprorts-facility-booking-platform.vercel.app',
+    ],
     credentials: true,
   }),
 );

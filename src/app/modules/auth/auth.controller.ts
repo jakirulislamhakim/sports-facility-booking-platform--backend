@@ -15,7 +15,7 @@ const signup = catchAsync(async (req, res) => {
   });
 
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    statusCode: httpStatus.CREATED,
     message: `User registered successfully`,
     data,
     token: accessToken,
@@ -26,7 +26,7 @@ const createAdminByAdmin = catchAsync(async (req, res) => {
   const data = await AuthServices.createAdminByAdminIntoDB(req.body);
 
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    statusCode: httpStatus.CREATED,
     message: `Admin registered successfully`,
     data,
   });

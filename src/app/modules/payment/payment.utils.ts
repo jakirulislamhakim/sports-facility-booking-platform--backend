@@ -17,10 +17,10 @@ export const initiatePayment = async (payload: TInitialPayment) => {
     cus_phone,
     amount: Number(amount),
     currency: 'BDT',
-    desc: `Buy Facility ${facilityName}`,
-    success_url: `http://localhost:5000/api/payment/confirm?tranId=${tran_id}&status=success`,
-    fail_url: `http://localhost:5000/api/payment/confirm?status=failed`,
-    cancel_url: 'http://localhost:5173/facilities',
+    desc: `Booking ${facilityName}`,
+    success_url: `https://sports-facility-booking-platform-backend-tawny.vercel.app/api/payment/confirm?tranId=${tran_id}&status=success`,
+    fail_url: `https://sports-facility-booking-platform-backend-tawny.vercel.app/api/payment/confirm?status=failed`,
+    cancel_url: config.AAMAR_PAY_CANCEL_URL,
     type: 'json',
   };
 
